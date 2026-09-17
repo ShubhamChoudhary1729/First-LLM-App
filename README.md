@@ -7,7 +7,7 @@ Replies stream in token-by-token, full conversation history is kept per session,
 
 ##                Features
 
-- 🌊 Streaming replies (SSE) — words appear as they are generated
+- 🌊 123Streaming replies (SSE) — words appear as they are generated
 - 🧠 Conversation memory — full history sent with every request
 - 🔄 Model switcher — change between Gemini Flash/Pro models in the header
 - 📊 Daily quota tracker — shows remaining free-tier requests per model
