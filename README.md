@@ -5,7 +5,7 @@ Replies stream in token-by-token, full conversation history is kept per session,
 
 ---
 
-## Features
+##                Features
 
 - 🌊 Streaming replies (SSE) — words appear as they are generated
 - 🧠 Conversation memory — full history sent with every request
