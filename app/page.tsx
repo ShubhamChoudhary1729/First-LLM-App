@@ -10,13 +10,13 @@ type Message = {
 
 // Keep this list in sync with ALLOWED_MODELS in app/api/chat/route.ts
 const MODELS = [
-  { id: "gemini-3.8-flash", label: "Gemini 3.8 Flash" },
-  { id: "gemini-3.7-flash", label: "Gemini 3.7 Flash" },
-  { id: "gemini-3.6-flash", label: "Gemini 3.6 Flash" },
-  { id: "gemini-3.5-flash", label: "Gemini 3.5 Flash" },
-  { id: "gemini-3.5-flash-lite", label: "Gemini 3.5 Flash Lite" },
-  { id: "gemini-2.5-pro", label: "Gemini 2.5 Pro" },
-  { id: "gemini-2.5-flash", label: "Gemini 2.5 Flash" },
+  { id: "gemini-3.8-flash",     label: "Gemini 3.8 Flash" },
+  { id: "gemini-3.7-flash",     label: "Gemini 3.7 Flash" },
+  { id: "gemini-3.6-flash",     label: "Gemini 3.6 Flash" },
+  { id: "gemini-3.5-flash",     label: "Gemini 3.5 Flash" },
+  { id: "gemini-3.5-flash-lite",label: "Gemini 3.5 Flash Lite" },
+  { id: "gemini-2.5-pro",       label: "Gemini 2.5 Pro" },
+  { id: "gemini-2.5-flash",     label: "Gemini 2.5 Flash" },
 ];
 
 const DEFAULT_MODEL = "gemini-3.8-flash";
@@ -30,7 +30,7 @@ const DEFAULT_MODEL = "gemini-3.8-flash";
 const FREE_TIER_DAILY_LIMIT = 20;
 
 type ModelUsage = { count: number; exhausted: boolean };
-type UsageMap = Record<string, ModelUsage>;
+type UsageMap   = Record<string, ModelUsage>;
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD" — auto-resets daily
@@ -54,13 +54,13 @@ let idCounter = 0;
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [model, setModel] = useState(DEFAULT_MODEL);
+  const [input, setInput]       = useState("");
+  const [loading, setLoading]   = useState(false);
+  const [model, setModel]       = useState(DEFAULT_MODEL);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
-  const [usage, setUsage] = useState<UsageMap>({});
+  const [usage, setUsage]       = useState<UsageMap>({});
   const bottomRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef  = useRef<HTMLTextAreaElement>(null);
 
   // Hydrate usage from localStorage after first render (avoids SSR mismatch)
   useEffect(() => { setUsage(loadUsage()); }, []);
@@ -210,10 +210,10 @@ export default function ChatPage() {
   }
 
   // ─── Derived values for the selected model ────────────────────────────────
-  const selUsage = getModelUsage(usage, model);
-  const remaining = Math.max(0, FREE_TIER_DAILY_LIMIT - selUsage.count);
-  const pct = (selUsage.count / FREE_TIER_DAILY_LIMIT) * 100;
-  const barColor = selUsage.exhausted ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
+  const selUsage   = getModelUsage(usage, model);
+  const remaining  = Math.max(0, FREE_TIER_DAILY_LIMIT - selUsage.count);
+  const pct        = (selUsage.count / FREE_TIER_DAILY_LIMIT) * 100;
+  const barColor   = selUsage.exhausted ? "#ef4444" : pct >= 75 ? "#f59e0b" : "#22c55e";
 
   return (
     <main style={s.page}>
@@ -221,7 +221,7 @@ export default function ChatPage() {
       <header style={s.header}>
         <div style={s.headerInner}>
           <span style={s.logo}>✦</span>
-          <span style={s.title}>First LLM App</span>
+          <span style={s.title}>Gemini Chat</span>
 
           <div style={s.headerRight}>
             {/* Remaining-requests pill */}
@@ -242,7 +242,7 @@ export default function ChatPage() {
               aria-label="Select Gemini model"
             >
               {MODELS.map((m) => {
-                const mu = getModelUsage(usage, m.id);
+                const mu  = getModelUsage(usage, m.id);
                 const rem = Math.max(0, FREE_TIER_DAILY_LIMIT - mu.count);
                 const tag = mu.exhausted ? " — full" : ` (${rem} left)`;
                 return (
@@ -332,82 +332,60 @@ export default function ChatPage() {
 
 /* ─── Styles ─────────────────────────────────────────────── */
 const s: Record<string, React.CSSProperties> = {
-  page: {
-    display: "flex", flexDirection: "column", height: "100dvh",
-    background: "#0d0d0d", fontFamily: "'Inter',system-ui,sans-serif", color: "#e8e8e8"
-  },
+  page: { display:"flex", flexDirection:"column", height:"100dvh",
+          background:"#0d0d0d", fontFamily:"'Inter',system-ui,sans-serif", color:"#e8e8e8" },
 
-  header: { borderBottom: "1px solid #1e1e1e", padding: "0 1.25rem", flexShrink: 0 },
-  headerInner: { maxWidth: 720, margin: "0 auto", height: 56, display: "flex", alignItems: "center", gap: "0.5rem" },
-  logo: { fontSize: "1rem", color: "#7c6ff7" },
-  title: { fontSize: "1rem", fontWeight: 600, letterSpacing: "-0.01em" },
-  headerRight: { marginLeft: "auto", display: "flex", alignItems: "center", gap: "0.6rem" },
+  header: { borderBottom:"1px solid #1e1e1e", padding:"0 1.25rem", flexShrink:0 },
+  headerInner: { maxWidth:720, margin:"0 auto", height:56, display:"flex", alignItems:"center", gap:"0.5rem" },
+  logo:  { fontSize:"1rem", color:"#7c6ff7" },
+  title: { fontSize:"1rem", fontWeight:600, letterSpacing:"-0.01em" },
+  headerRight: { marginLeft:"auto", display:"flex", alignItems:"center", gap:"0.6rem" },
 
-  usagePill: {
-    display: "flex", alignItems: "center", gap: "0.35rem",
-    background: "#111", border: "1px solid #222", borderRadius: 20, padding: "0.2rem 0.65rem"
-  },
-  dot2: { width: 7, height: 7, borderRadius: "50%", flexShrink: 0, display: "inline-block" },
-  usageLabel: { fontSize: "0.72rem", color: "#888", whiteSpace: "nowrap" as const },
+  usagePill: { display:"flex", alignItems:"center", gap:"0.35rem",
+               background:"#111", border:"1px solid #222", borderRadius:20, padding:"0.2rem 0.65rem" },
+  dot2: { width:7, height:7, borderRadius:"50%", flexShrink:0, display:"inline-block" },
+  usageLabel: { fontSize:"0.72rem", color:"#888", whiteSpace:"nowrap" as const },
 
-  barTrack: { height: 2, background: "#1a1a1a" },
-  barFill: { height: "100%", borderRadius: 2, transition: "width 0.4s ease, background 0.4s ease" },
+  barTrack: { height:2, background:"#1a1a1a" },
+  barFill:  { height:"100%", borderRadius:2, transition:"width 0.4s ease, background 0.4s ease" },
 
-  modelSelect: {
-    background: "#111", color: "#aaa", border: "1px solid #2a2a2a",
-    borderRadius: 8, padding: "0.3rem 0.6rem", fontSize: "0.78rem",
-    fontFamily: "inherit", cursor: "pointer", outline: "none"
-  },
-  modelSelectDisabled: { opacity: 0.5, cursor: "not-allowed" },
+  modelSelect: { background:"#111", color:"#aaa", border:"1px solid #2a2a2a",
+                 borderRadius:8, padding:"0.3rem 0.6rem", fontSize:"0.78rem",
+                 fontFamily:"inherit", cursor:"pointer", outline:"none" },
+  modelSelectDisabled: { opacity:0.5, cursor:"not-allowed" },
 
-  messageArea: {
-    flex: 1, overflowY: "auto", padding: "1.5rem 1.25rem",
-    display: "flex", flexDirection: "column", gap: "1rem"
-  },
+  messageArea: { flex:1, overflowY:"auto", padding:"1.5rem 1.25rem",
+                 display:"flex", flexDirection:"column", gap:"1rem" },
 
-  empty: { margin: "auto", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem" },
-  emptyIcon: { fontSize: "2rem", color: "#7c6ff7", margin: 0 },
-  emptyText: { fontSize: "1.15rem", fontWeight: 600, margin: 0, color: "#ccc" },
-  emptyHint: { fontSize: "0.8rem", color: "#555", margin: 0 },
+  empty: { margin:"auto", textAlign:"center", display:"flex", flexDirection:"column", alignItems:"center", gap:"0.4rem" },
+  emptyIcon: { fontSize:"2rem", color:"#7c6ff7", margin:0 },
+  emptyText: { fontSize:"1.15rem", fontWeight:600, margin:0, color:"#ccc" },
+  emptyHint: { fontSize:"0.8rem", color:"#555", margin:0 },
 
-  row: { display: "flex", alignItems: "flex-end", gap: "0.5rem", maxWidth: 720, width: "100%", margin: "0 auto" },
-  avatar: {
-    flexShrink: 0, width: 28, height: 28, borderRadius: "50%", background: "#1a1a2e",
-    border: "1px solid #2e2e4e", display: "flex", alignItems: "center",
-    justifyContent: "center", fontSize: "0.65rem", color: "#7c6ff7"
-  },
-  bubble: {
-    padding: "0.65rem 1rem", borderRadius: 18, maxWidth: "78%",
-    lineHeight: 1.65, fontSize: "0.94rem", wordBreak: "break-word", whiteSpace: "pre-wrap"
-  },
-  bubbleUser: { background: "#7c6ff7", color: "#fff", borderBottomRightRadius: 4 },
-  bubbleAssistant: { background: "#1a1a1a", color: "#e0e0e0", border: "1px solid #272727", borderBottomLeftRadius: 4 },
-  editBtn: {
-    flexShrink: 0, background: "transparent", border: "1px solid #333",
-    borderRadius: 8, color: "#666", fontSize: "0.8rem", padding: "0.25rem 0.5rem",
-    cursor: "pointer", alignSelf: "center", lineHeight: 1
-  },
-  typingBubble: { display: "flex", alignItems: "center", gap: 5, padding: "0.75rem 1rem" },
-  dot: { display: "inline-block", width: 7, height: 7, borderRadius: "50%", background: "#666", animation: "bounce 1.2s infinite" },
+  row:    { display:"flex", alignItems:"flex-end", gap:"0.5rem", maxWidth:720, width:"100%", margin:"0 auto" },
+  avatar: { flexShrink:0, width:28, height:28, borderRadius:"50%", background:"#1a1a2e",
+            border:"1px solid #2e2e4e", display:"flex", alignItems:"center",
+            justifyContent:"center", fontSize:"0.65rem", color:"#7c6ff7" },
+  bubble: { padding:"0.65rem 1rem", borderRadius:18, maxWidth:"78%",
+            lineHeight:1.65, fontSize:"0.94rem", wordBreak:"break-word", whiteSpace:"pre-wrap" },
+  bubbleUser:      { background:"#7c6ff7", color:"#fff", borderBottomRightRadius:4 },
+  bubbleAssistant: { background:"#1a1a1a", color:"#e0e0e0", border:"1px solid #272727", borderBottomLeftRadius:4 },
+  editBtn: { flexShrink:0, background:"transparent", border:"1px solid #333",
+             borderRadius:8, color:"#666", fontSize:"0.8rem", padding:"0.25rem 0.5rem",
+             cursor:"pointer", alignSelf:"center", lineHeight:1 },
+  typingBubble: { display:"flex", alignItems:"center", gap:5, padding:"0.75rem 1rem" },
+  dot: { display:"inline-block", width:7, height:7, borderRadius:"50%", background:"#666", animation:"bounce 1.2s infinite" },
 
-  form: {
-    flexShrink: 0, padding: "0.75rem 1.25rem 1rem", borderTop: "1px solid #1a1a1a",
-    maxWidth: 720, width: "100%", margin: "0 auto", boxSizing: "border-box"
-  },
-  inputWrapper: {
-    display: "flex", alignItems: "flex-end", gap: "0.5rem", background: "#111",
-    border: "1px solid #2a2a2a", borderRadius: 14, padding: "0.5rem 0.5rem 0.5rem 1rem"
-  },
-  inputWrapperDisabled: { opacity: 0.6 },
-  textarea: {
-    flex: 1, background: "transparent", border: "none", outline: "none", color: "#e8e8e8",
-    fontSize: "0.94rem", fontFamily: "inherit", lineHeight: 1.6, resize: "none", overflowY: "hidden", padding: "0.2rem 0"
-  },
-  sendBtn: {
-    flexShrink: 0, width: 34, height: 34, borderRadius: 10, border: "none", fontSize: "1.1rem",
-    cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
-  },
-  sendBtnActive: { background: "#7c6ff7", color: "#fff" },
-  sendBtnDisabled: { background: "#222", color: "#444", cursor: "not-allowed" },
-  hint: { margin: "0.35rem 0 0", fontSize: "0.72rem", color: "#3a3a3a", textAlign: "center" },
+  form: { flexShrink:0, padding:"0.75rem 1.25rem 1rem", borderTop:"1px solid #1a1a1a",
+          maxWidth:720, width:"100%", margin:"0 auto", boxSizing:"border-box" },
+  inputWrapper: { display:"flex", alignItems:"flex-end", gap:"0.5rem", background:"#111",
+                  border:"1px solid #2a2a2a", borderRadius:14, padding:"0.5rem 0.5rem 0.5rem 1rem" },
+  inputWrapperDisabled: { opacity:0.6 },
+  textarea: { flex:1, background:"transparent", border:"none", outline:"none", color:"#e8e8e8",
+              fontSize:"0.94rem", fontFamily:"inherit", lineHeight:1.6, resize:"none", overflowY:"hidden", padding:"0.2rem 0" },
+  sendBtn: { flexShrink:0, width:34, height:34, borderRadius:10, border:"none", fontSize:"1.1rem",
+             cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" },
+  sendBtnActive:   { background:"#7c6ff7", color:"#fff" },
+  sendBtnDisabled: { background:"#222", color:"#444", cursor:"not-allowed" },
+  hint: { margin:"0.35rem 0 0", fontSize:"0.72rem", color:"#3a3a3a", textAlign:"center" },
 };

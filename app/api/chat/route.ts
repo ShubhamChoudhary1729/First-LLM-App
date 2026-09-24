@@ -21,9 +21,7 @@ const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models
 // This is sent to Gemini as a system-level prompt, separate from the conversation
 // history, so it applies to every reply without appearing in the chat.
 const SYSTEM_INSTRUCTION =
-  "You are a friendly, concise general assistant. " +
-  "Give clear, direct answers — avoid unnecessary filler or overly long responses. " +
-  "If you're unsure about something, say so honestly rather than guessing.";
+  "You are a helpful assistant. Always reply in Hindi using Devanagari script.";
 
 // ─── Retry config ─────────────────────────────────────────────────────────────
 // On a 503 (model overloaded), retry before surfacing an error.
