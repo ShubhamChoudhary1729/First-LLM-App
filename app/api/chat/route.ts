@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Resolve the model — validate against allowlist so arbitrary strings can't be injected
     const requestedModel: string | undefined = body?.model;
+    const clientInstruction: string | undefined = body?.systemInstruction;
     const model =
       requestedModel && ALLOWED_MODELS.has(requestedModel)
         ? requestedModel
@@ -101,7 +102,7 @@ export async function POST(req: NextRequest) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           // System instruction — edit SYSTEM_INSTRUCTION at the top of this file
-          systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+          systemInstruction: { parts: [{ text: clientInstruction || SYSTEM_INSTRUCTION }] },
           contents,
         }),
       });

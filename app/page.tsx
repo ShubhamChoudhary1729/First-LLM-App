@@ -21,6 +21,19 @@ const MODELS = [
 
 const DEFAULT_MODEL = "gemini-3.8-flash";
 
+// ─── Goal presets ─────────────────────────────────────────────────────────────
+// Each goal maps to a system instruction sent to Gemini.
+// Add, remove, or edit entries here to change the dropdown options.
+const GOALS = [
+  { id: "friendly",  label: "😊 Friendly Assistant", instruction: "You are a friendly, concise general assistant. Give clear, direct answers — avoid unnecessary filler or overly long responses. If you're unsure about something, say so honestly rather than guessing." },
+  { id: "concise",   label: "⚡ Strict Q&A",         instruction: "Answer only the exact question asked. No greetings, no extra context. Maximum 2 sentences." },
+  { id: "coder",     label: "💻 Code Tutor",          instruction: "You are an expert programming tutor. Explain concepts step-by-step with code examples. Use simple language suitable for beginners." },
+  { id: "creative",  label: "✨ Creative Writer",      instruction: "You are a creative storyteller. Write vivid, imaginative responses with rich descriptions and metaphors." },
+  { id: "hindi",     label: "🇮🇳 Hindi Assistant",     instruction: "You are a helpful assistant. Always reply in Hindi using Devanagari script." },
+];
+
+const DEFAULT_GOAL = "friendly";
+
 // ─── Usage tracking ──────────────────────────────────────────────────────────
 // Counts requests per model per day using localStorage so the numbers survive
 // page refreshes. Resets automatically each calendar day (key includes the date).
@@ -57,6 +70,7 @@ export default function ChatPage() {
   const [input, setInput]       = useState("");
   const [loading, setLoading]   = useState(false);
   const [model, setModel]       = useState(DEFAULT_MODEL);
+  const [goal, setGoal]         = useState(DEFAULT_GOAL);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [usage, setUsage]       = useState<UsageMap>({});
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -122,6 +136,7 @@ export default function ChatPage() {
         body: JSON.stringify({
           messages: fullHistory.map(({ role, content }) => ({ role, content })),
           model,
+          systemInstruction: GOALS.find((g) => g.id === goal)?.instruction,
         }),
       });
 
@@ -231,6 +246,22 @@ export default function ChatPage() {
                 {selUsage.exhausted ? "Quota full" : `${remaining}/${FREE_TIER_DAILY_LIMIT} left`}
               </span>
             </div>
+
+            {/* Goal picker */}
+            <select
+              id="goal-select"
+              style={{ ...s.modelSelect, ...s.goalSelect, ...(loading ? s.modelSelectDisabled : {}) }}
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              disabled={loading}
+              aria-label="Select assistant goal"
+            >
+              {GOALS.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
 
             {/* Model picker */}
             <select
@@ -352,6 +383,7 @@ const s: Record<string, React.CSSProperties> = {
   modelSelect: { background:"#111", color:"#aaa", border:"1px solid #2a2a2a",
                  borderRadius:8, padding:"0.3rem 0.6rem", fontSize:"0.78rem",
                  fontFamily:"inherit", cursor:"pointer", outline:"none" },
+  goalSelect:  { minWidth:140 },
   modelSelectDisabled: { opacity:0.5, cursor:"not-allowed" },
 
   messageArea: { flex:1, overflowY:"auto", padding:"1.5rem 1.25rem",
