@@ -21,8 +21,7 @@ const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models
 // This is sent to Gemini as a system-level prompt, separate from the conversation
 // history, so it applies to every reply without appearing in the chat.
 const SYSTEM_INSTRUCTION =
-  "You are a helpful assistant. Always reply in Hindi using Devanagari script."
-
+  "Answer only the exact question asked. No greetings, no extra context. Maximum 2 sentences."
 // ─── Retry config ─────────────────────────────────────────────────────────────
 // On a 503 (model overloaded), retry before surfacing an error.
 // Retries only happen before the stream starts, so they are always safe.
