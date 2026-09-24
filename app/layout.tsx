@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Chat",
+  title: "First LLM App",
   description: "A minimal AI chat app powered by Google Gemini",
 };
 
