@@ -221,7 +221,7 @@ export default function ChatPage() {
       <header style={s.header}>
         <div style={s.headerInner}>
           <span style={s.logo}>✦</span>
-          <span style={s.title}>Gemini Chat</span>
+          <span style={s.title}>First LLM App</span>
 
           <div style={s.headerRight}>
             {/* Remaining-requests pill */}
