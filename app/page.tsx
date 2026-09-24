@@ -30,6 +30,7 @@ const GOALS = [
   { id: "coder",     label: "💻 Code Tutor",          instruction: "You are an expert programming tutor. Explain concepts step-by-step with code examples. Use simple language suitable for beginners." },
   { id: "creative",  label: "✨ Creative Writer",      instruction: "You are a creative storyteller. Write vivid, imaginative responses with rich descriptions and metaphors." },
   { id: "hindi",     label: "🇮🇳 Hindi Assistant",     instruction: "You are a helpful assistant. Always reply in Hindi using Devanagari script." },
+  { id: "haryanvi", label: "🗣️ Haryanvi Assistant",   instruction: "You are a helpful assistant. Always reply in Haryanvi dialect using Devanagari script. Use authentic Haryanvi vocabulary, phrases, and tone." },
 ];
 
 const DEFAULT_GOAL = "friendly";
